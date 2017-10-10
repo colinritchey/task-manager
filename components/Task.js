@@ -63,6 +63,30 @@ const taskTarget = {
 };
 
 class Task extends Component {
+  constructor(props){
+    super(props);
+
+    this.state = {
+      text: this.props.text
+    }
+
+    this.updateTask = this.updateTask.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps.text !== this.state.text){
+      this.setState({text: nextProps.text})
+    }
+  }
+
+  updateTask(e){
+    this.props.updateTask(this.props.index, e.target.value)
+  }
+
+  deleteTask(e){
+    this.props.deleteTask(this.props.index)
+  }
+
   render() {
     const { text, isDragging, connectDragSource, connectDropTarget } = this.props;
     const opacity = isDragging ? 0 : 1;
@@ -73,14 +97,20 @@ class Task extends Component {
         style={{ opacity }}>
         <div className='task-actions'>
           <div className='left-actions'>
-            <i className="fa fa-ellipsis-h" aria-hidden="true"></i>
-            <h3>Task</h3>
+            <span className='three-ellipsis'>
+              <i className="fa fa-ellipsis-h" aria-hidden="true"></i>
+              <i className="fa fa-ellipsis-h" aria-hidden="true"></i>
+              <i className="fa fa-ellipsis-h" aria-hidden="true"></i>
+            </span>
+            <span>Task</span>
           </div>
 
-          <i className="fa fa-trash-o" aria-hidden="true"></i>
+          <i className="fa fa-trash-o" onClick={() => this.deleteTask()} aria-hidden="true"></i>
         </div>
 
-        <textarea>{text}</textarea>
+        <textarea
+          onChange={this.updateTask}
+          value={this.state.text}></textarea>
       </div>,
     ));
   }

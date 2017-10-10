@@ -1,4 +1,4 @@
-let tasks = { 1: {id: 1, content: 'asdf'}, 2: {id: 2, content: 'jklk'}}
+// let tasks = { 1: {id: 1, content: 'asdf'}, 2: {id: 2, content: 'jklk'}}
 
 export const postTasks = (tasks) => (
   $.ajax({
