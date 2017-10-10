@@ -1,5 +1,3 @@
-// let tasks = { 1: {id: 1, content: 'asdf'}, 2: {id: 2, content: 'jklk'}}
-
 export const postTasks = (tasks) => (
   $.ajax({
     url : "http://cfassignment.herokuapp.com/colinritchey/tasks",
@@ -13,7 +11,7 @@ export const postTasks = (tasks) => (
   })
 );
 
-export const getTasks = () => {
+export const getTasks = (retries = 0) => {
   let result = {};
 
   $.ajax({
@@ -22,7 +20,14 @@ export const getTasks = () => {
     async: false,
     success    : function(res){
       result = res;
-      // console.log(res, "in get request");
+    },
+    error: function(){
+      if(retries < 5){
+        retries++;
+        result = getTasks(retries);
+      } else {
+        console.log('too many retries');
+      }
     }
   })
 

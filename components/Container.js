@@ -4,6 +4,7 @@ import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import Task from './Task';
 import * as TaskAPI from './util/actions';
+const shortid = require('shortid');
 
 import './styles/Container.less';
 
@@ -21,7 +22,7 @@ class Container extends Component {
 
     if(this.props.tasks){
       tasks = Object.keys(this.props.tasks).map((el) => this.props.tasks[el]);
-      tasks = tasks.sort((a, b) => a.id - b.id)
+      tasks = tasks.sort((a, b) => a.index - b.index)
     }
 
     this.state = {
@@ -36,7 +37,7 @@ class Container extends Component {
         return nextProps.tasks.tasks[el]
       });
 
-      tasks = tasks.sort((a, b) => a.id - b.id)
+      tasks = tasks.sort((a, b) => a.index - b.index)
 
       this.setState({tasks: tasks})
     }
@@ -45,6 +46,9 @@ class Container extends Component {
   moveTask(dragIndex, hoverIndex) {
     const { tasks } = this.state;
     const dragTask = tasks[dragIndex];
+
+    tasks[dragIndex].index = hoverIndex;
+    tasks[hoverIndex].index = dragIndex;
 
     this.setState(update(this.state, {
       tasks: {
@@ -76,9 +80,13 @@ class Container extends Component {
   }
 
   addTask(){
-    let task = { id: this.state.tasks.length + 1, text: '' };
-    let tasks = this.state.tasks;
-    tasks.unshift(task)
+    let task = { id: shortid.generate(), text: '', index: 0 };
+    let tasks = [task];
+
+    this.state.tasks.forEach((el, i) => {
+      el.index = i + 1;
+      tasks.push(el)
+    });
 
     this.setState({
       tasks: tasks
