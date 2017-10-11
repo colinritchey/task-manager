@@ -80,11 +80,12 @@ class Task extends Component {
   }
 
   updateTask(e){
-    this.props.updateTask(this.props.index, e.target.value)
+    // debugger;
+    this.props.updateTask(this.props.id, e.target.value);
   }
 
   deleteTask(e){
-    this.props.deleteTask(this.props.index)
+    this.props.deleteTask(this.props.id)
   }
 
   render() {

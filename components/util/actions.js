@@ -12,24 +12,24 @@ export const postTasks = (tasks) => (
 );
 
 export const getTasks = (retries = 0) => {
-  let result = {};
+  // let result = {};
 
-  $.ajax({
+  return $.ajax({
     url : "http://cfassignment.herokuapp.com/colinritchey/tasks",
     type: "GET",
-    async: false,
-    success    : function(res){
-      result = res;
-    },
+    // async: false,
+    // success    : function(res){
+    //   result = res;
+    // },
     error: function(){
       if(retries < 5){
         retries++;
-        result = getTasks(retries);
+        return getTasks(retries);
       } else {
         console.log('too many retries');
       }
     }
   })
 
-  return result;
+  // return result;
 }

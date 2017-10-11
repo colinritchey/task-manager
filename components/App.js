@@ -1,5 +1,8 @@
 import React from 'react';
+import { Provider } from 'react-redux'
+
 import Container from './Container';
+import TasksContainer from './TasksContainer';
 
 import * as TaskAPI from './util/actions';
 import './styles/App.less';
@@ -7,20 +10,16 @@ import './styles/App.less';
 class App extends React.Component {
   constructor(props){
     super(props);
-    this.state = { tasks: {} }
-  }
-
-  componentDidMount(){
-    let response = TaskAPI.getTasks();
-    this.setState({ tasks: response });
   }
 
   render(){
     return(
-      <div className='App'>
-        <div className='navbar'></div>
-        <Container tasks={this.state.tasks}/>
-      </div>
+      <Provider store={store}>
+        <div className='App'>
+          <div className='navbar'></div>
+          <TasksContainer />
+        </div>
+      </Provider>
     )
   }
 }

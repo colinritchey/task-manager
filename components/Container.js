@@ -13,10 +13,10 @@ class Container extends Component {
     super(props);
 
     this.moveTask = this.moveTask.bind(this);
-    this.updateTask = this.updateTask.bind(this);
+    this.updateTask = this.updateTask.bind(this); //todo delete
     this.saveTasks = this.saveTasks.bind(this);
     this.addTask = this.addTask.bind(this);
-    this.deleteTask = this.deleteTask.bind(this);
+    this.deleteTask = this.deleteTask.bind(this); //todo delete
 
     let tasks = [];
 
@@ -30,14 +30,17 @@ class Container extends Component {
     }
   }
 
+  componentDidMount() {
+    this.props.requestTasks();
+  }
+
   componentWillReceiveProps(nextProps){
     if(nextProps.tasks !== this.state.tasks){
+      // let tasks = Object.keys(nextProps.tasks).map((el) => {
+      //   return nextProps.tasks[el]
+      // });
 
-      let tasks = Object.keys(nextProps.tasks.tasks).map((el) => {
-        return nextProps.tasks.tasks[el]
-      });
-
-      tasks = tasks.sort((a, b) => a.index - b.index)
+      let tasks = nextProps.tasks.sort((a, b) => a.index - b.index)
 
       this.setState({tasks: tasks})
     }
@@ -60,7 +63,7 @@ class Container extends Component {
     }));
   }
 
-  updateTask(index, value){
+  updateTask(index, value){ //todo delete
     let newTasks = this.state.tasks;
     newTasks[index].text = value;
 
@@ -105,7 +108,7 @@ class Container extends Component {
   render() {
     let tasks = this.state.tasks;
 
-    console.log('tasks: ', tasks);
+    console.log('in render, tasks: ', tasks);
 
     return (
       <div className='container'>
@@ -121,15 +124,15 @@ class Container extends Component {
           </div>
         </div>
 
-        {tasks.map((tasks, i) => (
+        {tasks.map((task, i) => (
           <Task
-            key={tasks.id}
+            key={task.id}
             index={i}
-            id={tasks.id}
-            text={tasks.text}
+            id={task.id}
+            text={task.text}
             moveTask={this.moveTask}
-            updateTask={this.updateTask}
-            deleteTask={this.deleteTask}
+            updateTask={this.props.updateTask}
+            deleteTask={this.props.deleteTask}
           />
         ))}
       </div>
