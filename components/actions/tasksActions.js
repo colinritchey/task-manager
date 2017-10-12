@@ -3,6 +3,8 @@ import { displayNotification } from '../actions/notificationActions';
 
 export const RECEIVE_TASKS = "RECEIVE_TASKS";
 export const RECEIVE_TASK = "RECEIVE_TASK";
+export const RECEIVE_ERROR = "RECEIVE_ERROR";
+export const CLEAR_ERROR = "CLEAR_ERROR";
 export const REMOVE_TASK = "REMOVE_TASK";
 export const ADD_TASK = "ADD_TASK";
 export const MOVE_TASKS = "MOVE_TASKS";
@@ -11,6 +13,15 @@ export const TASK_ERROR = "TASK_ERROR";
 export const receiveTasks = tasks => ({
   type: RECEIVE_TASKS,
   tasks: tasks.tasks
+});
+
+export const receiveError = res => ({
+  type: RECEIVE_ERROR,
+  error: res
+});
+
+export const clearError = () => ({
+  type: CLEAR_ERROR
 });
 
 export const receiveTask = (taskId, value) => ({
@@ -34,9 +45,12 @@ export const moveTwoTasks = (dragTask, hoverTask) => ({
   hoverTask
 });
 
-export const fetchTasks = () => dispatch => (
-  APIUtil.getTasks().then(tasks => dispatch(receiveTasks(tasks)))
-);
+export const fetchTasks = () => dispatch => {
+  // console.log('within fetchTasks: ');
+  return APIUtil.getTasks()
+    .done(tasks => { dispatch(receiveTasks(tasks)); dispatch(clearError()); })
+    .catch((r) => dispatch(receiveError(r)))
+};
 
 export const postTasks = (tasks) => dispatch => {
   return (

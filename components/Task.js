@@ -73,6 +73,7 @@ class Task extends Component {
     }
 
     this.updateTask = this.updateTask.bind(this);
+    this.getFocused = this.getFocused.bind(this);
   }
 
   componentWillReceiveProps(nextProps){
@@ -82,7 +83,6 @@ class Task extends Component {
   }
 
   updateTask(e){
-    // debugger;
     this.props.updateTask(this.props.id, e.target.value);
   }
 
@@ -90,10 +90,19 @@ class Task extends Component {
     this.props.deleteTask(this.props.id)
   }
 
+  getFocused(component){
+    if (component &&
+      this.props.index === 0 &&
+      this.props.text === '') {
+      // debugger;
+      component.focus();
+    }
+  }
+
   render() {
     const { text, isDragging, connectDragSource, connectDropTarget } = this.props;
     const opacity = isDragging ? 0 : 1;
-
+    // console.log(props);
     return connectDragSource(connectDropTarget(
       <div
         className='task-item'
@@ -112,6 +121,7 @@ class Task extends Component {
         </div>
 
         <textarea
+          ref={this.getFocused}
           onChange={this.updateTask}
           value={this.state.text}></textarea>
       </div>,

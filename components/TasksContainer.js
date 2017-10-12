@@ -12,14 +12,19 @@ import {
 } from './actions/tasksActions';
 
 const mapStateToProps = state => {
-  // debugger;
   let tasks = [];
+  let error = false;
   if(state.tasks){
     tasks = Object.keys(state.tasks).map(el => state.tasks[el]);
   }
 
+  if(state.error){
+    error = state.error;
+  }
+
   return {
-    tasks: tasks
+    tasks: tasks,
+    error
   }
 };
 

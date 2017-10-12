@@ -14,6 +14,7 @@ class Container extends Component {
 
     this.moveTask = this.moveTask.bind(this);
     this.saveTasks = this.saveTasks.bind(this);
+    // this.addTasks = this.addTasks.bind(this);
 
     let tasks = [];
 
@@ -30,6 +31,7 @@ class Container extends Component {
 
   componentDidMount() {
     this.props.requestTasks();
+
   }
 
   componentWillReceiveProps(nextProps){
@@ -38,7 +40,10 @@ class Container extends Component {
       let tasks = nextProps.tasks.sort((a, b) => a.index - b.index)
       let saveDisabled = false;
 
-      // debugger;
+      if(nextProps.error.error === true){
+        console.log('error happened');
+        this.props.requestTasks();
+      }
 
       if(this.state.tasks.length === 0){
         saveDisabled = true;
@@ -52,18 +57,7 @@ class Container extends Component {
     const { tasks } = this.state;
     const dragTask = tasks[dragIndex];
 
-    // this.props.moveTasks(tasks[dragIndex], tasks[hoverIndex]);
-    tasks[dragIndex].index = hoverIndex;
-    tasks[hoverIndex].index = dragIndex;
-
-    this.setState(update(this.state, {
-      tasks: {
-        $splice: [
-          [dragIndex, 1],
-          [hoverIndex, 0, dragTask],
-        ],
-      },
-    }));
+    this.props.moveTasks(tasks[dragIndex], tasks[hoverIndex]);
 
     this.setState({saveDisabled: false});
   }
@@ -77,6 +71,12 @@ class Container extends Component {
 
     this.props.saveTasks(result);
   }
+
+  // addTasks(){
+  //   this.props.addTask();
+  //   // debugger;
+  //   // this.setState({ addTask: true })
+  // }
 
   render() {
     let tasks = this.state.tasks;

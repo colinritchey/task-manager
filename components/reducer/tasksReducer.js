@@ -1,5 +1,6 @@
 import { RECEIVE_TASKS,
          RECEIVE_TASK,
+         RECEIVE_ERROR,
          REMOVE_TASK,
          ADD_TASK,
          MOVE_TASKS,
@@ -54,8 +55,12 @@ const tasksReducer = (state = {}, action) => {
       nextState[action.hoverTask.id].index = dragIndex;
 
       return nextState;
-    // case TODO_ERROR:
-    //   alert(action.error);
+    // case RECEIVE_ERROR:
+    //   debugger;
+    //   nextState = merge({}, state);
+    //   nextState.error = 'failed to fetch'
+    //   return nextState;
+
     default:
       return state;
   }
