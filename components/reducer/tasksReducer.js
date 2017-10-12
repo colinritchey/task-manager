@@ -1,8 +1,12 @@
 import { RECEIVE_TASKS,
          RECEIVE_TASK,
          REMOVE_TASK,
+         ADD_TASK,
+         MOVE_TASKS,
          TASK_ERROR } from '../actions/tasksActions';
+
 import merge from 'lodash.merge';
+const shortid = require('shortid');
 
 const tasksReducer = (state = {}, action) => {
   Object.freeze(state);
@@ -10,19 +14,45 @@ const tasksReducer = (state = {}, action) => {
 
   switch(action.type){
     case RECEIVE_TASKS:
-      debugger;
       nextState = Object.assign({}, action.tasks);
-
       return nextState;
+
     case RECEIVE_TASK:
       let nextState = Object.assign({}, state);
       let newTask = state[action.taskId];
+
       newTask.text = action.value;
       nextState[action.taskId] = newTask;
+
       return nextState;
+
     case REMOVE_TASK:
       nextState = merge({}, state);
       delete nextState[action.taskId];
+      return nextState;
+
+    case ADD_TASK:
+      nextState = merge({}, state);
+      let task = { id: shortid.generate(), text: '', index: 0 };
+
+      for(let id in nextState){
+        nextState[id].index++;
+      }
+
+      nextState[task.id] = task;
+
+      return nextState;
+    case MOVE_TASKS:
+      // debugger;
+
+      nextState = merge({}, state);
+
+      let dragIndex = nextState[action.dragTask.id].index;
+      let hoverIndex = nextState[action.hoverTask.id].index;
+
+      nextState[action.dragTask.id].index = hoverIndex;
+      nextState[action.hoverTask.id].index = dragIndex;
+
       return nextState;
     // case TODO_ERROR:
     //   alert(action.error);

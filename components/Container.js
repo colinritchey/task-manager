@@ -13,10 +13,7 @@ class Container extends Component {
     super(props);
 
     this.moveTask = this.moveTask.bind(this);
-    this.updateTask = this.updateTask.bind(this); //todo delete
     this.saveTasks = this.saveTasks.bind(this);
-    this.addTask = this.addTask.bind(this);
-    this.deleteTask = this.deleteTask.bind(this); //todo delete
 
     let tasks = [];
 
@@ -26,7 +23,8 @@ class Container extends Component {
     }
 
     this.state = {
-      tasks: tasks
+      tasks: tasks,
+      saveDisabled: true
     }
   }
 
@@ -36,13 +34,17 @@ class Container extends Component {
 
   componentWillReceiveProps(nextProps){
     if(nextProps.tasks !== this.state.tasks){
-      // let tasks = Object.keys(nextProps.tasks).map((el) => {
-      //   return nextProps.tasks[el]
-      // });
 
       let tasks = nextProps.tasks.sort((a, b) => a.index - b.index)
+      let saveDisabled = false;
 
-      this.setState({tasks: tasks})
+      // debugger;
+
+      if(this.state.tasks.length === 0){
+        saveDisabled = true;
+      }
+
+      this.setState({tasks: tasks, saveDisabled: saveDisabled})
     }
   }
 
@@ -50,6 +52,7 @@ class Container extends Component {
     const { tasks } = this.state;
     const dragTask = tasks[dragIndex];
 
+    // this.props.moveTasks(tasks[dragIndex], tasks[hoverIndex]);
     tasks[dragIndex].index = hoverIndex;
     tasks[hoverIndex].index = dragIndex;
 
@@ -61,15 +64,8 @@ class Container extends Component {
         ],
       },
     }));
-  }
 
-  updateTask(index, value){ //todo delete
-    let newTasks = this.state.tasks;
-    newTasks[index].text = value;
-
-    this.setState({
-      tasks: newTasks
-    })
+    this.setState({saveDisabled: false});
   }
 
   saveTasks(){
@@ -79,36 +75,11 @@ class Container extends Component {
       result[el.id] = el;
     })
 
-    TaskAPI.postTasks(result).then(r => console.log('post made: ', r));
-  }
-
-  addTask(){
-    let task = { id: shortid.generate(), text: '', index: 0 };
-    let tasks = [task];
-
-    this.state.tasks.forEach((el, i) => {
-      el.index = i + 1;
-      tasks.push(el)
-    });
-
-    this.setState({
-      tasks: tasks
-    });
-  }
-
-  deleteTask(index){
-    let tasks = this.state.tasks;
-    tasks = [...tasks.slice(0, index), ...tasks.slice(index+1)];
-
-    this.setState({
-      tasks: tasks
-    });
+    this.props.saveTasks(result);
   }
 
   render() {
     let tasks = this.state.tasks;
-
-    console.log('in render, tasks: ', tasks);
 
     return (
       <div className='container'>
@@ -116,10 +87,12 @@ class Container extends Component {
           <h3>Tasks</h3>
           <div className="button-container">
             <button
-              onClick={() => this.addTask()}
+              onClick={() => this.props.addTask()}
               className='add'>Add Task</button>
             <button
-              onClick={() => this.saveTasks()}
+              onClick={() => this.saveTasks(tasks)}
+              type="button"
+              disabled={this.state.saveDisabled}
               className='save'>Save</button>
           </div>
         </div>

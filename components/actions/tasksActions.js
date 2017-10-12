@@ -1,13 +1,13 @@
 import * as APIUtil from '../util/actions';
-// import { receiveErrors, clearErrors } from './error_actions';
+import { displayNotification } from '../actions/notificationActions';
 
 export const RECEIVE_TASKS = "RECEIVE_TASKS";
 export const RECEIVE_TASK = "RECEIVE_TASK";
 export const REMOVE_TASK = "REMOVE_TASK";
+export const ADD_TASK = "ADD_TASK";
+export const MOVE_TASKS = "MOVE_TASKS";
 export const TASK_ERROR = "TASK_ERROR";
 
-
-// sync actions
 export const receiveTasks = tasks => ({
   type: RECEIVE_TASKS,
   tasks: tasks.tasks
@@ -24,39 +24,38 @@ export const removeTask = taskId => ({
   taskId
 });
 
-// export const taskError = error => ({
-//   type: TASK_ERROR,
-//   error
-// })
+export const addNewTask = () => ({
+  type: ADD_TASK
+});
 
+export const moveTwoTasks = (dragTask, hoverTask) => ({
+  type: MOVE_TASKS,
+  dragTask,
+  hoverTask
+});
 
-
-// async actions
 export const fetchTasks = () => dispatch => (
   APIUtil.getTasks().then(tasks => dispatch(receiveTasks(tasks)))
 );
 
-export const postTasks = () => dispatch => (
-  APIUtil.postTasks().then(tasks => dispatch(receiveTasks(tasks)))
+export const postTasks = (tasks) => dispatch => {
+  return (
+    APIUtil.postTasks(tasks)
+      .then(tasks => dispatch(receiveTasks(tasks)))
+      .then(res => dispatch(displayNotification('Save Success', true)))
+      .catch(res => dispatch(displayNotification('Save Failed', false)))
+  );
+}
+
+export const updateTask = (taskId, value) => dispatch => (
+  dispatch(receiveTask(taskId, value))
 );
 
-// export const fetchTask = id => dispatch => (
-//   TaskAPIUtil.fetchTask(id).then(task => dispatch(receiveTask(task)))
-// );
-//
-// export const createTask = task => dispatch => (
-//   TaskAPIUtil.createTask(task)
-//   .then(task => { dispatch(receiveTask(task)); dispatch(clearErrors())},
-//   err => dispatch(receiveErrors(err.responseJSON)))
-// );
-//
-// export const updateTask = (taskId, value) => dispatch => {
-//   // debugger;
-//   return (
-//     (taskId, value) => dispatch(receiveTask(taskId, value))
-//   );
-// }
-export const updateTask = (taskId, value) => dispatch => dispatch(receiveTask(taskId, value));
+export const addTask = () => dispatch => dispatch(addNewTask());
+
+export const moveTasks = (dragTask, hoverTask) => dispatch => {
+  dispatch(moveTwoTasks(dragTask, hoverTask))
+};
 
 export const deleteTask = taskId => dispatch => (
   dispatch(removeTask(taskId))
