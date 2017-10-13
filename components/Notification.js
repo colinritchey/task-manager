@@ -22,12 +22,14 @@ class Notification extends Component {
   render(){
     let notification = this.state.notification;
     let visible = notification.display ? '' : 'hidden';
-    let color = notification.success ? 'lightgreen' : 'lightred'
-
+    let color = notification.success ? 'lightgreen' : '#cc0000'
+    debugger;
     return (
       <div
         className='notification'
-        style={{ visibility: visible, color: color, borderColor: color}}>
+        style={{ visibility: visible,
+          color: color,
+          borderColor: color}}>
         {`${notification.message}`}
         <button
           onClick={() => this.clearNote()}

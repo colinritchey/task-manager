@@ -2,9 +2,17 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
 import { DragSource, DropTarget } from 'react-dnd';
-// import ItemTypes from './ItemTypes';
 const flow = require('lodash.flow');
 import './styles/Task.less';
+
+/*
+  taskSource & taskTarget are functions that came from an example
+  project given by the React DND repo. Their primary purpose is
+  to handle the dragging UI.
+
+  https://github.com/react-dnd/react-dnd
+
+*/
 
 const taskSource = {
   beginDrag(props) {
@@ -20,46 +28,28 @@ const taskTarget = {
     const dragIndex = monitor.getItem().index;
     const hoverIndex = props.index;
 
-    // Don't replace items with themselves
     if (dragIndex === hoverIndex) {
       return;
     }
 
-    // Determine rectangle on screen
-    const hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
+    let hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
 
-    // Get vertical middle
-    const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+    let hoverMidHoz = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
 
-    // Determine mouse position
-    const clientOffset = monitor.getClientOffset();
+    let clientOffset = monitor.getClientOffset();
 
-    // Get pixels to the top
-    const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+    let hoverClientHoz = clientOffset.y - hoverBoundingRect.top;
 
-    // Only perform the move when the mouse has crossed half of the items height
-    // When dragging downwards, only move when the cursor is below 50%
-    // When dragging upwards, only move when the cursor is above 50%
-
-    // Dragging downwards
-    if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+    if (dragIndex < hoverIndex && hoverClientHoz < hoverMidHoz) {
       return;
     }
 
-    // Dragging upwards
-    if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+    if (dragIndex > hoverIndex && hoverClientHoz > hoverMidHoz) {
       return;
     }
 
-    // Time to actually perform the action
     props.moveTask(dragIndex, hoverIndex);
 
-    // debugger;
-    // monitor.getItem().isDragging = false;
-    // Note: we're mutating the monitor item here!
-    // Generally it's better to avoid mutations,
-    // but it's good here for the sake of performance
-    // to avoid expensive index searches.
     monitor.getItem().index = hoverIndex;
   },
 };
@@ -94,7 +84,6 @@ class Task extends Component {
     if (component &&
       this.props.index === 0 &&
       this.props.text === '') {
-      // debugger;
       component.focus();
     }
   }
@@ -102,7 +91,7 @@ class Task extends Component {
   render() {
     const { text, isDragging, connectDragSource, connectDropTarget } = this.props;
     const opacity = isDragging ? 0 : 1;
-    // console.log(props);
+
     return connectDragSource(connectDropTarget(
       <div
         className='task-item'

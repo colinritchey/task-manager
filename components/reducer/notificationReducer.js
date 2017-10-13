@@ -11,7 +11,6 @@ const notificationReducer = (state = { display: false, message: '', success: tru
 
   switch(action.type){
     case CLEAR_NOTE:
-      // debugger;
       nextState = Object.assign({}, state);
       nextState.display = false;
       return nextState;

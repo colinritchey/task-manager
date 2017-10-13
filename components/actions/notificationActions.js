@@ -13,4 +13,6 @@ export const displayNote = (message, success) => ({
 
 export const clearNotification = () => dispatch => dispatch(clearNote());
 
-export const displayNotification = (message, success) => dispatch => dispatch(displayNote(message, success))
+export const displayNotification = (message, success) => dispatch => (
+  dispatch(displayNote(message, success))
+);

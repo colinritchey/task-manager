@@ -46,9 +46,8 @@ export const moveTwoTasks = (dragTask, hoverTask) => ({
 });
 
 export const fetchTasks = () => dispatch => {
-  // console.log('within fetchTasks: ');
   return APIUtil.getTasks()
-    .done(tasks => { dispatch(receiveTasks(tasks)); dispatch(clearError()); })
+    .then(tasks => { dispatch(receiveTasks(tasks)); dispatch(clearError()); })
     .catch((r) => dispatch(receiveError(r)))
 };
 
@@ -56,8 +55,8 @@ export const postTasks = (tasks) => dispatch => {
   return (
     APIUtil.postTasks(tasks)
       .then(tasks => dispatch(receiveTasks(tasks)))
-      .then(res => dispatch(displayNotification('Save Success', true)))
-      .catch(res => dispatch(displayNotification('Save Failed', false)))
+      .then(res => dispatch(displayNotification('Tasks Saved Successfully', true)))
+      .catch(res => dispatch(displayNotification('Tasks Failed to Save', false)))
   );
 }
 

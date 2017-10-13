@@ -44,7 +44,6 @@ const tasksReducer = (state = {}, action) => {
 
       return nextState;
     case MOVE_TASKS:
-      // debugger;
 
       nextState = merge({}, state);
 
@@ -55,11 +54,6 @@ const tasksReducer = (state = {}, action) => {
       nextState[action.hoverTask.id].index = dragIndex;
 
       return nextState;
-    // case RECEIVE_ERROR:
-    //   debugger;
-    //   nextState = merge({}, state);
-    //   nextState.error = 'failed to fetch'
-    //   return nextState;
 
     default:
       return state;

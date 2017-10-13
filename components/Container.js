@@ -14,7 +14,6 @@ class Container extends Component {
 
     this.moveTask = this.moveTask.bind(this);
     this.saveTasks = this.saveTasks.bind(this);
-    // this.addTasks = this.addTasks.bind(this);
 
     let tasks = [];
 
@@ -31,7 +30,6 @@ class Container extends Component {
 
   componentDidMount() {
     this.props.requestTasks();
-
   }
 
   componentWillReceiveProps(nextProps){
@@ -40,7 +38,7 @@ class Container extends Component {
       let tasks = nextProps.tasks.sort((a, b) => a.index - b.index)
       let saveDisabled = false;
 
-      if(nextProps.error.error === true){
+      if(nextProps.error.error === true && nextProps.error.count < 8){
         console.log('error happened');
         this.props.requestTasks();
       }
@@ -71,12 +69,6 @@ class Container extends Component {
 
     this.props.saveTasks(result);
   }
-
-  // addTasks(){
-  //   this.props.addTask();
-  //   // debugger;
-  //   // this.setState({ addTask: true })
-  // }
 
   render() {
     let tasks = this.state.tasks;
