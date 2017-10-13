@@ -113,7 +113,8 @@ describe('task actions', () => {
         ));
         const expectedActions = [{ type: "RECEIVE_TASKS",
           tasks: {id: 1, text: "Test", index: 0 }},
-          {"message": "Save Success", "success": true, "type": "DISPLAY_NOTE"}
+          {"message": "Tasks Saved Successfully",
+            "success": true, "type": "DISPLAY_NOTE"}
         ];
 
         return store.dispatch(postTasks(tasks)).then(() => {
