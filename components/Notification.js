@@ -23,7 +23,6 @@ class Notification extends Component {
     let notification = this.state.notification;
     let visible = notification.display ? '' : 'hidden';
     let color = notification.success ? 'lightgreen' : '#cc0000'
-    debugger;
     return (
       <div
         className='notification'

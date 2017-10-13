@@ -8381,7 +8381,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 var postTasks = exports.postTasks = function postTasks(tasks) {
   return $.ajax({
-    url: "http://cfassignment.herokuapp.com/colinritchey/tasks",
+    url: "https://cfassignment.herokuapp.com/colinritchey/tasks",
     type: "POST",
     data: JSON.stringify({ tasks: tasks }),
     contentType: "application/json; charset=utf-8",
@@ -8393,7 +8393,7 @@ var getTasks = exports.getTasks = function getTasks() {
   var retries = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
 
   return $.ajax({
-    url: "http://cfassignment.herokuapp.com/colinritchey/tasks",
+    url: "https://cfassignment.herokuapp.com/colinritchey/tasks",
     type: "GET"
   });
 };
@@ -37883,7 +37883,6 @@ var Notification = function (_Component) {
       var notification = this.state.notification;
       var visible = notification.display ? '' : 'hidden';
       var color = notification.success ? 'lightgreen' : '#cc0000';
-      debugger;
       return _react2.default.createElement(
         'div',
         {
